@@ -1,0 +1,91 @@
+name: security groups
+sg:
+- expense-dev-db 
+- expense-dev-backend
+- expense-dev-frontend
+- expense-dev-bastion
+- expense-dev-app-Alb
+- expense-dev-vpn
+
+sg_rules:
+  vpn_rule:
+  - name: vpn_public
+    port:  994, 443, 22, 1194
+    source: public
+    desc: vpn_public accepting connection from public
+  db:
+  - name: db_backend
+    port: 3306
+    source: backend
+    desc: db accepting  connection from backend
+
+  - name: db_bastion
+    port: 3306 
+    source: backend
+    desc: db accepting  connection from bastion
+
+  - name: db_vpn
+    port: 3306
+    source: vpn
+    desc: db accepting  connection from vpn
+
+  app-alb:
+  - name: app-alb_vpn
+    port: 80
+    source: vpn
+    desc: app-alb accepting connection from vpn
+  
+
+  backend:
+  - name: backend_app_Alb
+    port: 8080
+    source: app-alb
+    desc: backend accepting  connection from alb
+
+  - name: backend_bastion
+    port: 22
+    source: bastion
+    desc: backend accepting  connection from bastion
+
+  - name: backend_vpn_ssh
+    port: 22
+    source: vpn
+    desc: backend accepting  connection from vpn
+
+  - name: backend_vpn_http
+    port: 8080
+    source: vpn
+    desc: backend accepting  connection from vpn
+
+  
+
+
+  frontend:
+  - name: frontend_public
+    port: 80
+    source: public
+    desc: frontend accepting  connection from public
+
+  - name: frontend_bastion
+    port: 22
+    source: public
+    desc: frontend accepting  connection from bastion
+
+
+
+
+bastion:
+- name: bastion_public
+  port: 22
+  source: public
+  desc: bastion accepting connection from public
+
+
+  
+
+  
+  
+
+
+
+
