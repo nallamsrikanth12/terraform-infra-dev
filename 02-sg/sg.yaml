@@ -5,6 +5,7 @@ sg:
 - expense-dev-frontend
 - expense-dev-bastion
 - expense-dev-app-Alb
+- expense-dev-web-Alb
 - expense-dev-vpn
 
 sg_rules:
@@ -34,6 +35,27 @@ sg_rules:
     port: 80
     source: vpn
     desc: app-alb accepting connection from vpn
+  - name: app-alb_frontend
+    port: 80
+    source: frontend
+    desc: app-alb accepting connection from frontend
+  
+  - name: app-alb_bastion
+    port: 80
+    source: frontend
+    desc: app-alb accepting connection from bastion
+
+   web_alb:
+  - name: web_alb_public
+    desc: web alb accepting connections from public
+    source: public
+    port: 80
+  - name: web_alb_public_https
+    desc: web alb accepting connections from public
+    source: public
+    port: 443
+   
+ 
   
 
   backend:
@@ -61,27 +83,32 @@ sg_rules:
 
 
   frontend:
-  - name: frontend_public
+  - name: frontend_web_alb
     port: 80
-    source: public
-    desc: frontend accepting  connection from public
+    source: web_alb
+    desc: frontend accepting  connection from web_alb
 
   - name: frontend_bastion
     port: 22
     source: public
     desc: frontend accepting  connection from bastion
-
-
-
-
-bastion:
-- name: bastion_public
-  port: 22
-  source: public
-  desc: bastion accepting connection from public
-
-
   
+  - name: frontend_vpn
+    port: 22
+    source: vpn
+    desc: frontend accepting  connection from vpn
+  
+   
+  bastion:
+  - name: bastion_public
+    port: 22
+    source: public
+    desc: bastion accepting connection from public
+
+
+
+
+
 
   
   
