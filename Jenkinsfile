@@ -12,7 +12,8 @@ pipeline {
         stage('init') {
             steps {
                 sh """
-                 ls -ltr
+                 cd o1-vpc
+                 terraform init
                 """
             }
         }
