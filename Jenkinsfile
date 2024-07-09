@@ -6,21 +6,20 @@ pipeline {
         // Timeout counter starts BEFORE agent is allocated
         timeout(time: 1, unit: 'MINUTES')
         disableConcurrentBuilds()
-        ansiColor('xterm')
     }
     parameters {
         choice(name: 'action', choices: ['apply', 'destroy'], description: 'Pick something')
-
     }
 
     stages {
         stage('init') {
             steps {
-                sh """
-                 cd 01-vpc
-                 terraform init -upgrade
-
-                """
+                ansiColor('xterm') {
+                    sh """
+                    cd 01-vpc
+                    terraform init -upgrade
+                    """
+                }
             }
         }
         stage('plan') {
@@ -30,10 +29,12 @@ pipeline {
                 }
             }
             steps {
-               sh """
-                cd 01-vpc
-                terraform plan
-               """
+                ansiColor('xterm') {
+                    sh """
+                    cd 01-vpc
+                    terraform plan
+                    """
+                }
             }
         }
         stage('Deploy') {
@@ -42,10 +43,12 @@ pipeline {
                 ok "Yes, we should."
             }
             steps {
-                sh """
-                cd 01-vpc
-                terraform apply -auto-approve
-                """
+                ansiColor('xterm') {
+                    sh """
+                    cd 01-vpc
+                    terraform apply -auto-approve
+                    """
+                }
             }
         }
         stage('Destroy') {
@@ -53,29 +56,27 @@ pipeline {
                 expression {
                     params.action == 'destroy'
                 }
-
             }
             steps {
-                sh """
-                cd 01-vpc
-                terraform destroy -auto-approve
-                """
+                ansiColor('xterm') {
+                    sh """
+                    cd 01-vpc
+                    terraform destroy -auto-approve
+                    """
+                }
             }
         }
-
     }
     post { 
-            always { 
+        always { 
             echo 'I will always say Hello again!'
             deleteDir()
         }
         success { 
-            echo 'I will run pipe is sucess'
+            echo 'I will run pipe is success'
         }
         failure { 
             echo 'I will run pipe is failure'
         }
-    
     }
-
 }
