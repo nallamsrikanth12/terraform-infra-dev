@@ -240,5 +240,18 @@ resource "aws_security_group_rule" "bastion_public" {
 }
 
 
+resource "aws_security_group_rule" "backend_defaulvpc" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  security_group_id =  module.backend.sg_id
+  cidr_blocks = ["172.31.0.0/16"]
+}
+
+
+
+
+
 
 

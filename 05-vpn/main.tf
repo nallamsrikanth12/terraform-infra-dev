@@ -1,6 +1,7 @@
 resource "aws_key_pair" "vpn" {
   key_name   = "openvpn"
-  public_key = file("D:\\.ssh\\openvpn.pub")  # Use double backslashes for Windows paths
+   public_key = file("D:/.ssh/openvpn.pub")
+  # Use double backslashes for Windows paths
 }
 
 module "ec2_instance" {
